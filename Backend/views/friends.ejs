@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x"
+      crossorigin="anonymous"
+    />
+  <title><%= title %></title>
+  <style>
+    body{
+ background-color: #1d2025;
+}
+
+div{
+ color: #e8e3e3;
+}
+ </style>
+</head>
+<body>
+ <!-- <div class="container"> -->
+   <!-- <div class="row"> -->
+     <!-- <div class="col"> -->
+      <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+          
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a href="/home" class=" nav-link " >Home </a>
+               
+              </li>
+                <a href="<%=currentuser.url%>" class=" nav-link active" >Profile</a>
+               
+              </li>
+              <li class="nav-item">
+                <a href="<%=currentuser.url%>/posts/create " class="nav-link" >New Post</a>
+              </li>
+              <li class="nav-item">
+                <a href="/about" class="nav-link " >About</a>
+              </li>
+              <li class="nav-item">
+                <a href="/contact" class="nav-link" >Contact</a>
+              </li>
+              <li class="nav-item">
+                <a href="/logout" class="nav-link" >Logout</a>
+              </li>
+             
+            </ul>
+            <div class="ms-auto">
+              <form class="d-flex" method="GET" action="/username">
+                <input class="form-control me-2" type="search" placeholder="username" aria-label="Search" name="username" value="username">
+                <button class="btn btn-outline-light">Search</button>
+              </form>
+              </div>
+          </div>
+        </div>
+      </nav>
+      <!-- <div class="d-grid gap-2 d-md-flex justify-content-md-end sticky-top">
+        <a href="<%=currentuser.url%>" class="btn btn-primary me-md-2" type="button">My Profile</a>
+        <a href="/home" class="btn btn-success" type="button">home</a>
+        <a href="/contact" class="btn btn-dark" type="button">contact</a>
+        <a href="/logout" class="btn btn-danger" type="button">Logout</a>
+      </div> -->
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col">
+            <h1 class="display-1 d-inline">Friends </h1>
+            <span><b><% friends.length%><b></span>
+              <button type="button" class="btn btn-outline-primary  fw-bold" onclick="javascript:history.back()">Back</button>
+            <% friends.forEach(function(friend) {%>
+           <p class="fs-3"> <%= friend.username %></p>
+           <% }) %>
+
+          </div>
+        </div>
+      </div>
+     <!-- </div> -->
+   <!-- </div> -->
+
+ <!-- </div> -->
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+</body>
+</html>

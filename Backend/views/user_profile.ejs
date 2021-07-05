@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x"
+      crossorigin="anonymous"
+    />
+    <style>
+      .blog-preview {
+  
+        border-bottom: 1px solid #e8e3e3;
+    padding: 13px 0px;
+    margin: 5px 0px;
+}
+
+.blog-preview:hover{
+  box-shadow: 1px 3px 5px rgba(0,0,0,0.1);
+}
+
+
+     body{
+  background-color: #1d2025;
+}
+
+div{
+  color: #e8e3e3;
+}
+
+img {
+  margin: 10px 0px;
+  height: 200px;
+  width: 200px;
+}
+  
+    </style>
+</head>
+<body>
+  <!-- <div class="container"> -->
+
+    
+    <!-- <div class="row"> -->
+      <nav class="navbar navbar-expand-lg navbar-dark bg-primary ">
+        <div class="container-fluid">
+          
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a href="/home" class=" nav-link" >Home </a>
+               
+              </li>
+                <a href="<%=currentuser.url%>" class=" nav-link active" >Profile</a>
+               
+              </li>
+              <li class="nav-item">
+                <a href="<%=currentuser.url%>/posts/create " class="nav-link" >New Post</a>
+              </li>
+              <li class="nav-item">
+                <a href="/about" class="nav-link" >About</a>
+              </li>
+              <li class="nav-item">
+                <a href="/contact" class="nav-link" >Contact</a>
+              </li>
+              <li class="nav-item">
+                <a href="/logout" class="nav-link" >Logout</a>
+              </li>
+             
+            </ul>
+            <div class="ms-auto">
+              <form class="d-flex" method="GET" action="/username">
+                <input class="form-control me-2" type="search" placeholder="username" aria-label="Search" name="username" value="username">
+                <button class="btn btn-outline-light">Search</button>
+              </form>
+              </div>
+          </div>
+        </div>
+      </nav>
+      <!-- </div> -->
+
+      <div class="container-fluid">
+        
+        
+        <div class="row">
+        <div class="col">
+
+            <div>
+              <%if (profilepic.img.data==null){%>
+                <h3>NO DP</h3>
+                <%}else{%>
+              <img src="data:image/<%=profilepic.img.contentType %>;base64,
+                 <%=profilepic.img.data.toString('base64')%>">
+                 <%}%>
+                 <%if (currentuser._id.toString() === user._id.toString() ) {%>
+                 <div class="col">
+                  <a href="/users/<%= currentuser._id%>/profileimage"  style='display:inline;' class="btn btn-outline-success my-2">Change picture</a>
+                </div>
+                <%}%>
+           
+            </div>
+          
+            <h1 class='display-1 d-inline'> <%= user.username%></h1>
+            <%if (currentuser._id.toString() !== user._id.toString() ) {%>
+                
+              <!-- <a href="/users/<%currentuser._id%>/profileimage"  style='display:inline;' class="btn btn-outline-success btn-lg mx-5" data-user-id ="<%= user._id%>">Change profile picture</button> -->
+             
+              
+            <% if(currentuser.friends.includes(user._id)) {%>
+            <button onclick="actOnFriend(event);"  style='display:inline;' class="btn btn-outline-success btn-lg mx-5" data-user-id ="<%= user._id%>">Unfriend</button>
+            <%}else{%>
+            <button onclick="actOnFriend(event);"  style='display:inline;' class="btn btn-outline-success btn-lg mx-5" data-user-id ="<%= user._id%>">Friend</button>
+            <%}%>
+           
+              <!-- <div class="col">
+              <a href="/users/<%currentuser._id%>/profileimage"  style='display:inline;' class="btn btn-outline-success">Change picture</a>
+              </div> -->
+              
+            <%}%>
+
+
+  
+           <dl class="row fs-4">
+  
+            <dt class="col-sm-3">Full Name:</dt>
+            <dd class="col-sm-9"><%= user.fullname %></dd>
+  
+            <dt class="col-sm-3">Date of Birth:</dt>
+            <dd class="col-sm-9"><%= user.date_of_birth_formatted %></dd>
+  
+            <dt class="col-sm-3">Country:</dt>
+            <dd class="col-sm-9"><%= user.country %></dd>
+  
+            <dt class="col-sm-3">City:</dt>
+            <dd class="col-sm-9"><%= user.city %></dd>
+  
+            <dt class="col-sm-3">Gender:</dt>
+            <dd class="col-sm-9"><%= user.gender %></dd>
+          
+            <dt class="col-sm-3">User ID:</dt>
+            <dd class="col-sm-9"><%= user._id %></dd>   
+        
+          </dl>
+            
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <a href="/users/<%= user._id%>/friends" class="text-decoration-none text-success"><b> Friends<b class="mx-2 text-decoration-none"> <%= user.friends.length %></b></b></a>
+        </div>
+      </div>
+  
+      <div class="row ">
+        <div class="col">
+          <% user_posts_list && user_posts_list.forEach(function(post){ %>
+            <div class="blog-preview">
+              <div class="title">
+                <h5 class="d-inline me-3"><%= post.post_name %></h5>
+                <small class="mx-3"><%= post.posted_at_formatted %> </small>
+              </div>
+              <div class="details">
+                <p class=""><%= post.post_details%></p>
+                <div>
+                  <% if (currentuser.liked_posts.includes(post._id)){ %>
+                    <button onclick="actOnPost(event);"  style='display:inline;' class="btn btn-outline-warning btn-sm" data-post-id ="<%= post._id%>">Unlike</button>
+                    <span id="likes-count-<%= post._id%>"><%= post.likes_count%> </span>
+    
+                    <%}else{%>
+                  <button onclick="actOnPost(event);"  style='display:inline;' class="btn btn-outline-warning btn-sm" data-post-id ="<%= post._id%>">Like</button>
+                  <span id="likes-count-<%= post._id%>"><%= post.likes_count%> </span>
+                      <%}%>
+  
+                </div>
+
+                <a href="<%= post.url %>" class="btn btn-primary  my-1 ms-auto">Go to this post</a>
+                <% if (post.user_id.toString()===currentuser._id.toString()) {%>
+                  <a href="<%=post.url%>/delete" type='button' class="btn btn-outline-danger mx-3 my-1 fw-bold">Delete</a>
+                    <%}%>
+              </div>
+            
+  
+            </div>
+            <% }) %>
+  
+        </div>
+       
+      
+       </div>
+      </div>
+    <!-- </div> -->
+  
+ 
+  <!-- <p>
+    <%= user.fullname %>
+  </p>
+  <p><%= user.first_name %></p>
+  <p><%= user.Last_name %></p>
+  <p><%= user.date_of_birth_formatted %></p>
+  <p><%= user.country %></p>
+  <p><%= user.city %></p>
+  <p><%= user.gender %></p>
+
+ <a href= "<%= user.url %>">User url:   </a> -->
+  
+  
+
+
+
+
+<!-- <ul>
+  <li><a href="/home">Home</a></li>
+  <li><a href="/logout">Logout</a></li>
+</ul> -->
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+
+  var toggleButtonText = {
+    Friend: function(button) {
+      button.textContent = "Unfriend";
+    },
+    Unfriend: function(button) {
+      button.textContent = "Friend";
+    }
+  };
+
+  var actOnFriend = function (event) {
+        // console.log(event.target+1)
+          var userId = event.target.dataset.userId;
+          // console.log(userId)
+          // console.log(event.target.dataset.postId)
+          var action = event.target.textContent.trim();
+          // console.log(action)
+
+          toggleButtonText[action](event.target);
+          axios.post('/users/' + userId + '/act', { action: action })
+          .then(function (response) {
+    return response;
+  })
+  .catch(function (error) {
+    console.log(error.response.data);  
+     console.log(error.response.status);  
+     console.log(error.response.headers); 
+  });
+};
+  </script>
+  
+  <script>
+      var updatePostStats = {
+          Like: function (postId) {
+              document.querySelector('#likes-count-' + postId).textContent++;
+          },
+          Unlike: function(postId) {
+              document.querySelector('#likes-count-' + postId).textContent--;
+          }
+      };
+  
+      var toggleButtonText = {
+          Like: function(button) {
+              button.textContent = "Unlike";
+          },
+          Unlike: function(button) {
+              button.textContent = "Like";
+          }
+      };
+  
+      var actOnPost = function (event) {
+        // console.log(event.target+1)
+          var postId = event.target.dataset.postId;
+          // console.log(event.target.dataset)
+          // console.log(event.target.dataset.postId)
+          var action = event.target.textContent.trim();
+          // console.log(action)
+
+          toggleButtonText[action](event.target);
+          updatePostStats[action](postId);
+          axios.post('/posts/' + postId + '/act', { action: action })
+          .then(function (response) {
+    console.log(response);
+  })
+  .catch(function (error) {
+    console.log(error.response.data);  
+     console.log(error.response.status);  
+     console.log(error.response.headers); 
+  });
+      };
+  </script>
+   <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+    <script>
+      var pusher = new Pusher('0fe554d234b992ab53fd',{
+        cluster: 'ap2'
+      });
+
+      var socketId;
+      pusher.connection.bind('connected', function(){
+        socketId = pusher.connection.socket_id;
+      });
+      var channel = pusher.subscribe('post-events');
+      channel.bind('postAction', function(data){
+        console.log(data);
+        var action = data.action;
+        // updatePostStats[action](data.postId);
+      });
+
+    </script>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+</body>
+</html>
